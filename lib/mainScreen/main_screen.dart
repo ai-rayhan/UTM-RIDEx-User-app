@@ -661,7 +661,7 @@ class _MainScreenState extends State<MainScreen>
                             }
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.green,
+                          backgroundColor: Colors.green,
                           textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
                         ),
                       ),
@@ -797,7 +797,7 @@ class _MainScreenState extends State<MainScreen>
                           _makingPhoneCall();
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.green,
+                          backgroundColor: Colors.green,
                         ),
                           icon: const Icon(
                             Icons.phone_android,

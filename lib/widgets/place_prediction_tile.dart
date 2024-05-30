@@ -70,7 +70,7 @@ class _PlacePredictionTileDesignState extends State<PlacePredictionTileDesign> {
         getPlaceDirectionDetails(widget.predictedPlaces!.place_id, context);
       },
       style: ElevatedButton.styleFrom(
-        primary: Colors.white10,
+        backgroundColor: Colors.white10,
       ),
       child: Padding(
         padding: const EdgeInsets.all(4.0),

@@ -82,7 +82,7 @@ class _PayFareAmountDialogState extends State<PayFareAmountDialog>
               padding: const EdgeInsets.all(18.0),
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.green,
+                  backgroundColor: Colors.green,
                 ),
                   onPressed: ()
                   {

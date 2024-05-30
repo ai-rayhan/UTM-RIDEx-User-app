@@ -147,7 +147,7 @@ class _RateDriverScreenState extends State<RateDriverScreen> {
                     });
                   }, 
                   style: ElevatedButton.styleFrom(
-                    primary: Colors.green,
+                    backgroundColor: Colors.green,
                     padding: EdgeInsets.symmetric(horizontal: 70),
                   ),
                   child: const Text(

@@ -62,7 +62,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   SystemNavigator.pop();
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.purple
+                  backgroundColor: Colors.purple
                 ),
                 child: const Text(
                   "Close",
