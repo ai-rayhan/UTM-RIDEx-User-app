@@ -72,7 +72,8 @@ class _SignUpScreenState extends State<SignUpScreen>
         password: passwordtextEditingController.text.trim(), //if executed successfully, pass to firebase
       ).catchError((msg){ //for error chance occur
         Navigator.pop(context);
-        Fluttertoast.showToast(msg: "Error: " + msg.toString());
+print(msg);       
+ Fluttertoast.showToast(msg: "Error: " + msg.toString());
       })
     ).user;
 
@@ -87,7 +88,7 @@ class _SignUpScreenState extends State<SignUpScreen>
         };
 
         DatabaseReference usersRef = FirebaseDatabase.instance.ref().child("users"); //panel driver = parent node
-        usersRef.child(firebaseUser.uid).set(userMap); //recognize unique user id
+        usersRef.child(firebaseUser.uid).set(userMap); //rzzzzzzzzzecognize unique user id
 
         currentFirebaseUser = firebaseUser;
         Fluttertoast.showToast(msg: "Account has been created.");

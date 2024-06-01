@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:users_app/assistants/request_assistant.dart';
 import 'package:users_app/global/map_key.dart';
@@ -26,7 +28,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen>
         String urlAutoCompleteSearch = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$inputText&key=$mapkey&components=country:MY";
 
         var responseAutoCompleteSearch = await RequestAssistant.receiveRequest(urlAutoCompleteSearch);
-
+        log(responseAutoCompleteSearch.toString());
         if(responseAutoCompleteSearch == "Error Occurred, Failed. No response.")
           {
             return;
