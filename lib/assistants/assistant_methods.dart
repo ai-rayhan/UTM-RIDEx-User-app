@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:geolocator/geolocator.dart';
@@ -22,7 +23,7 @@ class AssistantMethods
     String humanReadableAddress="";
 
     var requestResponse = await RequestAssistant.receiveRequest(apiUrl);
-
+    log(requestResponse.toString());
     if(requestResponse != "Error Occurred, Failed. No response.")
       {
         humanReadableAddress = requestResponse["results"][0]["formatted_address"];

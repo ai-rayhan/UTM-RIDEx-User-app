@@ -1,14 +1,16 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:users_app/firebase_options.dart';
 import 'package:users_app/infoHandler/app_info.dart';
 import 'package:users_app/splashScreen/splash_screen.dart';
 
 void main() async
 {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-
+await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+);
   runApp(
     MyApp(
       child: ChangeNotifierProvider(

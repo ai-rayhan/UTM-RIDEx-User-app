@@ -1,13 +1,33 @@
 {
   "project_info": {
-    "project_number": "325923076972",
-    "project_id": "utm-ridex",
-    "storage_bucket": "utm-ridex.appspot.com"
+    "project_number": "553055157417",
+    "firebase_url": "https://friendly-folio-425114-v9-default-rtdb.firebaseio.com",
+    "project_id": "friendly-folio-425114-v9",
+    "storage_bucket": "friendly-folio-425114-v9.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:325923076972:android:c58ef340ceab7b5bc0d149",
+        "mobilesdk_app_id": "1:553055157417:android:8f2bad1e8ae2f664693db8",
+        "android_client_info": {
+          "package_name": "com.example.utm_ridex"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASFtzZe2paD0wuoCFjTwMm0l71INI-7N0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:553055157417:android:fa47443b7bfa9f31693db8",
         "android_client_info": {
           "package_name": "com.ridesharing.app"
         }
@@ -15,7 +35,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDc3JJnnz04rTc-wVSHtVZT7R5-9lm4wOk"
+          "current_key": "AIzaSyASFtzZe2paD0wuoCFjTwMm0l71INI-7N0"
         }
       ],
       "services": {

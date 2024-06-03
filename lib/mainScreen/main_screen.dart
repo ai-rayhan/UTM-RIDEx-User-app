@@ -106,12 +106,14 @@ class _MainScreenState extends State<MainScreen>
     String humanReadableAddress = await AssistantMethods.searchAddressForGeographicCoOrdinates(userCurrentPosition!, context);
     print("this is you address = " + humanReadableAddress);
 
-    userName = userModelCurrentInfo!.name!;
-    userEmail = userModelCurrentInfo!.email!;
+    // userName = userModelCurrentInfo!.name!;
+    // userEmail = userModelCurrentInfo!.email!;
+     setState(() {
+       
+     });
+    // initializeGeofireListener();
 
-    initializeGeofireListener();
-
-    AssistantMethods.readTripKeysForOnlineUser(context);
+    // AssistantMethods.readTripKeysForOnlineUser(context);
   }
 
   @override
