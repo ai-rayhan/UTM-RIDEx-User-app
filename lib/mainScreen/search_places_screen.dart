@@ -50,14 +50,14 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      // backgroundColor: Colors.black,
       body: Column(
         children: [
           //search place UI
           Container(
             height: 160,
             decoration: const BoxDecoration(
-              color: Colors.black54,
+              // color: Colors.black54,
               boxShadow: [
                 BoxShadow(
                   color: Colors.orange,
@@ -86,16 +86,16 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen>
                         },
                         child: const Icon(
                           Icons.arrow_back,
-                          color: Colors.black,
+                          // color: Colors.black,
                         ),
                       ),
 
                       const Center(
                         child: Text(
-                          "Search & Set Dropoff Location",
+                          "Search Drop off Location",
                           style: TextStyle(
                             fontSize: 18.0,
-                            color: Colors.black,
+                            // color: Colors.black,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -108,8 +108,8 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen>
                   Row(
                     children: [
                       const Icon(
-                        Icons.adjust_sharp,
-                        color: Colors.black,
+                        Icons.edit_location_alt_outlined,
+                        // color: Colors.black,
                       ),
 
                       const SizedBox(width: 18.0,),
@@ -123,7 +123,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen>
                                 findPlaceAutoCompleteSearch(valuetype);
                               },
                             decoration: const InputDecoration(
-                              hintText: "seach here...",
+                              hintText: "Search...",
                               fillColor: Colors.white54,
                               filled: true,
                               border: InputBorder.none,
@@ -146,22 +146,25 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen>
           //display place prediction result
           (placePredictedList.length > 0)
               ? Expanded(
-                  child: ListView.separated(
-                    itemCount: placePredictedList.length,
-                    physics: ClampingScrollPhysics(),
-                    itemBuilder: (context, index)
-                    {
-                      return PlacePredictionTileDesign(
-                        predictedPlaces: placePredictedList[index],
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index){
-                      return const Divider(
-                        height: 1,
-                        color: Colors.grey,
-                        thickness: 1,
-                      );
-                    },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListView.separated(
+                      itemCount: placePredictedList.length,
+                      physics: ClampingScrollPhysics(),
+                      itemBuilder: (context, index)
+                      {
+                        return PlacePredictionTileDesign(
+                          predictedPlaces: placePredictedList[index],
+                        );
+                      },
+                      separatorBuilder: (BuildContext context, int index){
+                        return const Divider(
+                          height: 1,
+                          color: Colors.white,
+                          thickness: 1,
+                        );
+                      },
+                    ),
                   ),
           )
               : Container(),

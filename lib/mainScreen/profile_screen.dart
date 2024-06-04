@@ -15,7 +15,7 @@ class _ProfileScreenState extends State<ProfileScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      // backgroundColor: Colors.black,
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -25,7 +25,7 @@ class _ProfileScreenState extends State<ProfileScreen>
             Text(
               userModelCurrentInfo!.name!,
               style: const TextStyle(
-                fontSize: 50.0,
+                fontSize: 30.0,
                 color: Colors.purple,
                 fontWeight: FontWeight.bold,
               ),
@@ -59,7 +59,8 @@ class _ProfileScreenState extends State<ProfileScreen>
 
             ElevatedButton(
                 onPressed:(){
-                  SystemNavigator.pop();
+                  // SystemNavigator.pop();
+                  Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple

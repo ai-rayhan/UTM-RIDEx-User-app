@@ -53,7 +53,7 @@ class _MainScreenState extends State<MainScreen>
 
   GlobalKey<ScaffoldState> sKey = GlobalKey<ScaffoldState>();
 
-  double searchLocationContainerHeight = 260.0;
+  double searchLocationContainerHeight = 300.0;
   double waitingResponseFromDriverContainerHeight = 0;
   double assignedDriverInfoContainerHeight = 0;
 
@@ -478,7 +478,12 @@ class _MainScreenState extends State<MainScreen>
       throw 'Could not launch $url';
     }
   }
-
+  int selectedIndex = -1;
+  void selectItem(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+  }
   @override
   Widget build(BuildContext context) {
     createActiveNearbyDriverIconMarker();
@@ -572,33 +577,27 @@ class _MainScreenState extends State<MainScreen>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          SizedBox(width: 16,),
+                          // SizedBox(width: 16,),
 
-                          SizedBox(
-                            height:75,
-                            width: 100,
-                            child: CustomContainer(child: 
-                            Stack(
-                              // mainAxisAlignment: MainAxisAlignment.center,
-                              children: [Image.asset("images/bike.png",height: 50,width: 70,),
-                              // Positioned(
-                              //   top: 40,
-                              //   left: 20,
-                              //   child: Text("Bike",style:TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.w700),))
-                              ],)
-                            )),
-                          SizedBox(width: 16,),
-                          SizedBox(
-                            height:75,
-                            width: 100,
-                            child: CustomContainer(child: 
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [Image.asset("images/car1.png",height: 50,width: 70,),
-                              // Text("Car",style:TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.w700),)
-                              ],)
-                            )),
-                                                    SizedBox(width: 16,),
+                          
+                          SelectionCard(
+                            bgColor: selectedIndex == 0? Colors.orange:null,
+                            image: "images/bike.png",ontap: () {
+                            selectItem(0);
+                          },),
+                          SizedBox(width: 10,),
+                          SelectionCard(
+                            bgColor:  selectedIndex == 1? Colors.orange:null,
+                            image: "images/car1.png",ontap: () {
+                             selectItem(1);
+                          },),
+                          SizedBox(width: 10,),
+                          SelectionCard(
+                            bgColor:  selectedIndex == 2? Colors.orange:null,
+                            image: "images/month.png",ontap: () {
+                             selectItem(2);
+                          },),
+                          // SizedBox(width: 16,),
 
                         ],
                       ),
@@ -686,27 +685,52 @@ class _MainScreenState extends State<MainScreen>
                       //   color: Colors.black,
                       // ),
 
-                      // const SizedBox(height: 16.0,),
+                      const SizedBox(height: 10.0,),
 
-                      ElevatedButton(
-                        child: const Text(
-                          "Request a Ride",
-                        ),
-                        onPressed: ()
-                        {
-                          if(Provider.of<AppInfo>(context, listen: false).userDropOffLocation != null)
-                            {
-                              saveRideRequestInformation();
-                            }
-                          else
-                            {
-                              Fluttertoast.showToast(msg: "Please select destination location");
-                            }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color.fromARGB(255, 253, 203, 127),
-                          textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              height: 50,
+                              decoration: BoxDecoration(
+                              color:Color.fromARGB(57, 255, 255, 255),
+                             border: Border.all(width: 1,color: Colors.white60),
+                              borderRadius: BorderRadius.circular(15)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox( 
+                                  height: 35,
+                                  width: 40,
+                                  child: Image.asset("images/shedule.png") ),
+                              ),
+                            ),
+                          ),
+                           SizedBox(width: 10,),
+                          Expanded(
+                            flex: 5,
+                            child: Container(
+                              height: 50,
+                              decoration: BoxDecoration(
+                              color:Color.fromARGB(57, 255, 255, 255),
+                             border: Border.all(width: 1,color: Colors.white60),
+                              borderRadius: BorderRadius.circular(15)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const Text(
+                                      "Ride Now 🚀",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container()
+                        ],
                       ),
 
                     ],
@@ -1078,5 +1102,32 @@ class _MainScreenState extends State<MainScreen>
           activeNearbyIcon = value;
         });
       }
+  }
+}
+
+class SelectionCard extends StatelessWidget {
+  const SelectionCard({
+    super.key, this.bgColor, required this.image, required this.ontap,
+  });
+final Color? bgColor;
+final String image;
+final VoidCallback ontap;
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap:ontap,
+      child: SizedBox(
+        height:75,
+        width: 100,
+        child: CustomContainer(
+        bgColor: bgColor,
+        child: 
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [Image.asset(image,height: 50,width: 70,),
+          // Text("Car",style:TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.w700),)
+          ],)
+        )),
+    );
   }
 }
