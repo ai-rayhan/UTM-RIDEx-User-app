@@ -16,7 +16,7 @@ await Firebase.initializeApp(
       child: ChangeNotifierProvider(
         create: (context) => AppInfo(),
         child: MaterialApp(
-          title: 'Driver App',
+          title: 'UTM RideX',
           theme: ThemeData(
             primarySwatch: Colors.blue,
           ),

@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_geofire/flutter_geofire.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -23,6 +25,7 @@ import 'package:users_app/mainScreen/select_nearest_active_driver_screen.dart';
 import 'package:users_app/models/active_nearby_available_drivers.dart';
 import 'package:users_app/models/direction_details_info.dart';
 import 'package:users_app/splashScreen/splash_screen.dart';
+import 'package:users_app/widgets/decorated_box.dart';
 import 'package:users_app/widgets/my_drawer.dart';
 import 'package:users_app/widgets/progress_dialog.dart';
 
@@ -50,7 +53,7 @@ class _MainScreenState extends State<MainScreen>
 
   GlobalKey<ScaffoldState> sKey = GlobalKey<ScaffoldState>();
 
-  double searchLocationContainerHeight = 220.0;
+  double searchLocationContainerHeight = 260.0;
   double waitingResponseFromDriverContainerHeight = 0;
   double assignedDriverInfoContainerHeight = 0;
 
@@ -563,41 +566,76 @@ class _MainScreenState extends State<MainScreen>
                   )
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
                   child: Column(
                     children: [
-                      //
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.add_location_alt_outlined, color: Colors.black,),
-                          const SizedBox(width: 12.0,),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "From",
-                                style: TextStyle(color: Colors.black, fontSize: 12),
-                              ),
-                              Text(
-                                Provider.of<AppInfo>(context).userPickUpLocation != null
-                                    ? (Provider.of<AppInfo>(context).userPickUpLocation!.locationName!).substring(0,24) + "..."
-                                    : "Failed to locate address",
-                                style: const TextStyle(color: Colors.black, fontSize: 14),
-                              ),
-                            ],
-                          ),
+                          SizedBox(width: 16,),
+
+                          SizedBox(
+                            height:75,
+                            width: 100,
+                            child: CustomContainer(child: 
+                            Stack(
+                              // mainAxisAlignment: MainAxisAlignment.center,
+                              children: [Image.asset("images/bike.png",height: 50,width: 70,),
+                              // Positioned(
+                              //   top: 40,
+                              //   left: 20,
+                              //   child: Text("Bike",style:TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.w700),))
+                              ],)
+                            )),
+                          SizedBox(width: 16,),
+                          SizedBox(
+                            height:75,
+                            width: 100,
+                            child: CustomContainer(child: 
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [Image.asset("images/car1.png",height: 50,width: 70,),
+                              // Text("Car",style:TextStyle(fontSize: 20,color: Colors.white,fontWeight: FontWeight.w700),)
+                              ],)
+                            )),
+                                                    SizedBox(width: 16,),
+
                         ],
                       ),
-
-                      const SizedBox(height: 10.0,),
-
-                      const Divider(
-                        height: 1,
-                        thickness: 1,
-                        color: Colors.black,
+                       SizedBox(height: 10,),
+                      CustomContainer(
+                        child: Row(
+                          children: [
+                            const Icon(Icons.my_location_sharp, color: Colors.red,),
+                            const SizedBox(width: 12.0,),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // const Text(
+                                //   "From",
+                                //   style: TextStyle(color: Colors.black, fontSize: 12),
+                                // ),
+                                Text(
+                                  Provider.of<AppInfo>(context).userPickUpLocation != null
+                                      ? (Provider.of<AppInfo>(context).userPickUpLocation!.locationName!).substring(0,24).toUpperCase()+ "..."
+                                      : "Failed to locate address",
+                                  style: const TextStyle(color: Colors.black, fontSize: 14),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
 
-                      const SizedBox(height: 16.0,),
+                      const SizedBox(height: 5.0,),
+
+                      // const Divider(
+                      //   height: 1,
+                      //   thickness: 1,
+                      //   color: Colors.black,
+                      // ),
+
+                      // const SizedBox(height: 16.0,),
                       //to
                       GestureDetector(
                         onTap: () async
@@ -614,38 +652,41 @@ class _MainScreenState extends State<MainScreen>
                               await drawPolyLineFromOriginToDestination();
                             }
                         },
-                        child: Row(
-                          children: [
-                            const Icon(Icons.add_location_alt_outlined, color: Colors.black,),
-                            const SizedBox(width: 12.0,),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  "To",
-                                  style: TextStyle(color: Colors.black, fontSize: 12),
-                                ),
-                                Text(
-                                  Provider.of<AppInfo>(context).userDropOffLocation != null
-                                      ? Provider.of<AppInfo>(context).userDropOffLocation!.locationName!
-                                      : "dropoff location",
-                                  style: const TextStyle(color: Colors.black, fontSize: 14),
-                                ),
-                              ],
-                            ),
-                          ],
+                        child: CustomContainer(
+                          child: Row(
+                                children: [
+                                  const Icon(Icons.add_location_outlined, color: Colors.blueGrey,),
+                                  const SizedBox(width: 12.0,),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      // const Text(
+                                      //   "To:",
+                                      //   style: TextStyle(color: Colors.black, fontSize: 12),
+                                      // ),
+                                      Text(
+                                        Provider.of<AppInfo>(context).userDropOffLocation != null
+                                            ? Provider.of<AppInfo>(context).userDropOffLocation!.locationName!
+                                            : "Search Destination",
+                                        style: const TextStyle(color: Colors.black, fontSize: 14),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                         ),
+                          
                       ),
 
-                      const SizedBox(height: 10.0,),
+                      // const SizedBox(height: 10.0,),
 
-                      const Divider(
-                        height: 1,
-                        thickness: 1,
-                        color: Colors.black,
-                      ),
+                      // const Divider(
+                      //   height: 1,
+                      //   thickness: 1,
+                      //   color: Colors.black,
+                      // ),
 
-                      const SizedBox(height: 16.0,),
+                      // const SizedBox(height: 16.0,),
 
                       ElevatedButton(
                         child: const Text(
@@ -663,7 +704,7 @@ class _MainScreenState extends State<MainScreen>
                             }
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.green,
+                          backgroundColor: Color.fromARGB(255, 253, 203, 127),
                           textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)
                         ),
                       ),

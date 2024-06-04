@@ -52,7 +52,7 @@ class _MySplashScreenState extends State<MySplashScreen>
   {
     return Material(
       child: Container(
-        color: Colors.black,
+        // color: Colors.black,
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
