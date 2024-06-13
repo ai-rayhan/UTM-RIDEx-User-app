@@ -508,280 +508,240 @@ class _MainScreenState extends State<MainScreen>
       ),
       body: Stack(
         children: [
-          GoogleMap(
-            padding: EdgeInsets.only(bottom: bottomPaddingOfMap),
-            mapType: MapType.normal,
-            myLocationEnabled: true,
-            zoomGesturesEnabled: true,
-            zoomControlsEnabled: true,
-            initialCameraPosition: _kGooglePlex,
-            polylines: polyLineSet,
-            markers: markersSet,
-            circles: circlesSet,
-            onMapCreated: (GoogleMapController controller)
-            {
-              _controllerGoogleMap.complete(controller);
-              newGoogleMapController = controller;
+        GoogleMap(
+      padding: EdgeInsets.only(bottom: bottomPaddingOfMap),
+      mapType: MapType.normal,
+      myLocationEnabled: true,
+      zoomGesturesEnabled: true,
+      zoomControlsEnabled: true,
+      initialCameraPosition: _kGooglePlex,
+      polylines: polyLineSet,
+      markers: markersSet,
+      circles: circlesSet,
+      onMapCreated: (GoogleMapController controller) {
+        _controllerGoogleMap.complete(controller);
+        newGoogleMapController = controller;
 
-              setState(() {
-                bottomPaddingOfMap = 265;
-              });
-              locateUserPosition();
-            },
+        setState(() {
+          bottomPaddingOfMap = 265;
+        });
+        locateUserPosition();
+      },
+    ),
+
+    //custom hamburger button for drawer
+    Positioned(
+      top: 36,
+      left: 22,
+      child: GestureDetector(
+        onTap: () {
+          if (openNavigationDrawer) {
+            sKey.currentState!.openDrawer();
+          } else {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (c) => const MySplashScreen()));
+          }
+        },
+        child: CircleAvatar(
+          backgroundColor: Colors.orange,
+          child: Icon(
+            openNavigationDrawer ? Icons.menu : Icons.close,
+            color: Colors.black54,
           ),
+        ),
+      ),
+    ),
 
-          //custom hamburger button for drawer
-          Positioned(
-            top: 36,
-            left: 22,
-            child: GestureDetector(
-              onTap: ()
-              {
-                if(openNavigationDrawer)
-                  {
-                    sKey.currentState!.openDrawer();
-                  }
-                else
-                  {
-                    //SystemNavigator.pop(); //restart/refresh app programatically
-                    Navigator.push(context, MaterialPageRoute(builder: (c)=> const MySplashScreen()));
-                  }
-              },
-              child: CircleAvatar(
-                backgroundColor: Colors.orange,
-                child: Icon(
-                  openNavigationDrawer ? Icons.menu : Icons.close,
-                  color: Colors.black54,
+    //ui for searching location
+    Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
+      child: AnimatedSize(
+        curve: Curves.easeIn,
+        duration: const Duration(milliseconds: 120),
+        child: Container(
+          height: searchLocationContainerHeight,
+          decoration: const BoxDecoration(
+              color: Colors.orangeAccent, //black87
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20),
+                topLeft: Radius.circular(20),
+              )),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SelectionCard(
+                      bgColor: selectedIndex == 0 ? Colors.orange : null,
+                      image: "images/bike.png",
+                      ontap: () {
+                        selectItem(0);
+                      },
+                    ),
+                    SizedBox(width: 10,),
+                    SelectionCard(
+                      bgColor: selectedIndex == 1 ? Colors.orange : null,
+                      image: "images/car1.png",
+                      ontap: () {
+                        selectItem(1);
+                      },
+                    ),
+                    SizedBox(width: 10,),
+                    SelectionCard(
+                      bgColor: selectedIndex == 2 ? Colors.orange : null,
+                      image: "images/delivery.png",
+                      ontap: () {
+                        selectItem(2);
+                      },
+                    ),
+                  ],
                 ),
-              ),
-            ),
-          ),
-
-          //ui for searching location
-          Positioned(
-            bottom: 0,
-            left: 0,
-            right: 0,
-            child: AnimatedSize(
-              curve: Curves.easeIn,
-              duration: const Duration(milliseconds: 120),
-              child: Container(
-                height: searchLocationContainerHeight,
-                decoration: const BoxDecoration(
-                  color: Colors.orangeAccent,//black87
-                  borderRadius: BorderRadius.only(
-                    topRight: Radius.circular(20),
-                    topLeft: Radius.circular(20),
-                  )
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
-                  child: Column(
+                SizedBox(height: 10,),
+                CustomContainer(
+                  child: Row(
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                      const Icon(Icons.my_location_sharp, color: Colors.red,),
+                      const SizedBox(width: 12.0,),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // SizedBox(width: 16,),
-
-                          
-                          SelectionCard(
-                            bgColor: selectedIndex == 0? Colors.orange:null,
-                            image: "images/bike.png",ontap: () {
-                            selectItem(0);
-                          },),
-                          SizedBox(width: 10,),
-                          SelectionCard(
-                            bgColor:  selectedIndex == 1? Colors.orange:null,
-                            image: "images/car1.png",ontap: () {
-                             selectItem(1);
-                          },),
-                          SizedBox(width: 10,),
-                          SelectionCard(
-                            bgColor:  selectedIndex == 2? Colors.orange:null,
-                            image: "images/delivery.png",ontap: () {
-                             selectItem(2);
-                          },),
-                          // SizedBox(width: 16,),
-
+                          Text(
+                            Provider.of<AppInfo>(context).userPickUpLocation != null
+                                ? (Provider.of<AppInfo>(context).userPickUpLocation!.locationName!).substring(0, 24).toUpperCase() + "..."
+                                : "Failed to locate address",
+                            style: const TextStyle(color: Colors.black, fontSize: 14),
+                          ),
                         ],
                       ),
-                       SizedBox(height: 10,),
-                      CustomContainer(
-                        child: Row(
-                          children: [
-                            const Icon(Icons.my_location_sharp, color: Colors.red,),
-                            const SizedBox(width: 12.0,),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // const Text(
-                                //   "From",
-                                //   style: TextStyle(color: Colors.black, fontSize: 12),
-                                // ),
-                                Text(
-                                  Provider.of<AppInfo>(context).userPickUpLocation != null
-                                      ? (Provider.of<AppInfo>(context).userPickUpLocation!.locationName!).substring(0,24).toUpperCase()+ "..."
-                                      : "Failed to locate address",
-                                  style: const TextStyle(color: Colors.black, fontSize: 14),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      const SizedBox(height: 5.0,),
-
-                      // const Divider(
-                      //   height: 1,
-                      //   thickness: 1,
-                      //   color: Colors.black,
-                      // ),
-
-                      // const SizedBox(height: 16.0,),
-                      //to
-                      GestureDetector(
-                        onTap: () async
-                        {
-                          var responseFromSearchScreen = await Navigator.push(context, MaterialPageRoute(builder: (c) => SearchPlacesScreen())); //go to search screen
-
-                          if(responseFromSearchScreen == "obtainedDropoff")
-                            {
-                              setState(() {
-                                openNavigationDrawer = false;
-                              });
-
-                              //draw routes/polyline
-                              await drawPolyLineFromOriginToDestination();
-                            }
-                        },
-                        child: CustomContainer(
-                          child: Row(
-                                children: [
-                                  const Icon(Icons.add_location_outlined, color: Colors.blueGrey,),
-                                  const SizedBox(width: 12.0,),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      // const Text(
-                                      //   "To:",
-                                      //   style: TextStyle(color: Colors.black, fontSize: 12),
-                                      // ),
-                                      Text(
-                                        Provider.of<AppInfo>(context).userDropOffLocation != null
-                                            ? Provider.of<AppInfo>(context).userDropOffLocation!.locationName!
-                                            : "Search Destination",
-                                        style: const TextStyle(color: Colors.black, fontSize: 14),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                        ),
-                          
-                      ),
-
-                      // const SizedBox(height: 10.0,),
-
-                      // const Divider(
-                      //   height: 1,
-                      //   thickness: 1,
-                      //   color: Colors.black,
-                      // ),
-
-                      const SizedBox(height: 10.0,),
-
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          GestureDetector(
-                            onTap: () async{
-                              DateTime? picked = await showDatePicker(
-                    context: context,
-                    initialDate: _scheduleTime,
-                    firstDate: DateTime.now(),
-                    lastDate: DateTime(2100),
-                  );
-                  if (picked != null) {
-                    TimeOfDay? time = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay.fromDateTime(_scheduleTime),
-                    );
-                    if (time != null) {
-                      setState(() {
-                        _scheduleTime = DateTime(
-                          picked.year,
-                          picked.month,
-                          picked.day,
-                          time.hour,
-                          time.minute,
-                        );
-                      });
-                    }
-                  }
-                            },
-                            child: Expanded(
-                              flex: 1,
-                              child: Container(
-                                height: 50,
-                                decoration: BoxDecoration(
-                                color:Color.fromARGB(57, 255, 255, 255),
-                               border: Border.all(width: 1,color: Colors.white60),
-                                borderRadius: BorderRadius.circular(15)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: SizedBox( 
-                                    height: 35,
-                                    width: 40,
-                                    child: Image.asset("images/shedule.png") ),
-                                ),
-                              ),
-                            ),
-                          ),
-                           SizedBox(width: 10,),
-                          Expanded(
-                            flex: 5,
-                            child: GestureDetector(
-                              onTap:() {
-                          if(Provider.of<AppInfo>(context, listen: false).userDropOffLocation != null)
-                            {
-                              saveRideRequestInformation();
-                            }
-                          else
-                            {
-                              Fluttertoast.showToast(msg: "Please select destination location");
-                            }
-                        },
-                              child: Container(
-                                height: 50,
-                                decoration: BoxDecoration(
-                                color:Color.fromARGB(57, 255, 255, 255),
-                               border: Border.all(width: 1,color: Colors.white60),
-                                borderRadius: BorderRadius.circular(15)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      const Text(
-                                        "Ride Now 🚀",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Container()
-                        ],
-                      ),
-
                     ],
                   ),
                 ),
-              ),
+
+                const SizedBox(height: 5.0,),
+
+                GestureDetector(
+                  onTap: () async {
+                    var responseFromSearchScreen = await Navigator.push(
+                        context, MaterialPageRoute(builder: (c) => SearchPlacesScreen())); //go to search screen
+
+                    if (responseFromSearchScreen == "obtainedDropoff") {
+                      setState(() {
+                        openNavigationDrawer = false;
+                      });
+
+                      //draw routes/polyline
+                      await drawPolyLineFromOriginToDestination();
+                    }
+                  },
+                  child: CustomContainer(
+                    child: Row(
+                      children: [
+                        const Icon(Icons.add_location_outlined, color: Colors.blueGrey,),
+                        const SizedBox(width: 12.0,),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              Provider.of<AppInfo>(context).userDropOffLocation != null
+                                  ? Provider.of<AppInfo>(context).userDropOffLocation!.locationName!
+                                  : "Search Destination",
+                              style: const TextStyle(color: Colors.black, fontSize: 14),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+
+                const SizedBox(height: 10.0,),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        DateTime? picked = await showDatePicker(
+                          context: context,
+                          initialDate: _scheduleTime,
+                          firstDate: DateTime.now(),
+                          lastDate: DateTime(2100),
+                        );
+                        if (picked != null) {
+                          TimeOfDay? time = await showTimePicker(
+                            context: context,
+                            initialTime: TimeOfDay.fromDateTime(_scheduleTime),
+                          );
+                          if (time != null) {
+                            setState(() {
+                              _scheduleTime = DateTime(
+                                picked.year,
+                                picked.month,
+                                picked.day,
+                                time.hour,
+                                time.minute,
+                              );
+                            });
+                          }
+                        }
+                      },
+                      child: Container(
+                        height: 50,
+                        decoration: BoxDecoration(
+                          color: Color.fromARGB(57, 255, 255, 255),
+                          border: Border.all(width: 1, color: Colors.white60),
+                          borderRadius: BorderRadius.circular(15)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            height: 35,
+                            width: 40,
+                            child: Image.asset("images/shedule.png")),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 10,),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          if (Provider.of<AppInfo>(context, listen: false).userDropOffLocation != null) {
+                            saveRideRequestInformation();
+                          } else {
+                            Fluttertoast.showToast(msg: "Please select destination location");
+                          }
+                        },
+                        child: Container(
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Color.fromARGB(57, 255, 255, 255),
+                            border: Border.all(width: 1, color: Colors.white60),
+                            borderRadius: BorderRadius.circular(15)),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  "Ride Now 🚀", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
+        ),
+      ),
+    ),
 
           //ui for waiting response from driver
           Positioned(
