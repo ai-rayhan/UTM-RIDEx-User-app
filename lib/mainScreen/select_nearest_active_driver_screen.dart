@@ -2,9 +2,11 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_star_rating_nsafe/smooth_star_rating.dart';
 import 'package:users_app/assistants/assistant_methods.dart';
 import 'package:users_app/global/global.dart';
+import 'package:users_app/infoHandler/app_info.dart';
 
 
 class SelectNearestActiveDriversScreen extends StatefulWidget
@@ -31,11 +33,25 @@ class _SelectNearestActiveDriversScreenState extends State<SelectNearestActiveDr
       }
     return fareAmount;
   }
-
+getDriverList(){
+  final int rideIndex= context.read<AppInfo>().rideIndex;
+  if(rideIndex==0){
+    dList=dList.where((element) => element['car_details']['vehicle_category']=='Bike').toList();
+  }else if(rideIndex==1){
+    dList=dList.where((element) => element['car_details']['vehicle_category']=='Car').toList();
+  }else if(rideIndex==2){
+    dList=dList.where((element) => element['delivery']=='yes').toList();
+  }
+}
   @override
   void dispose(){
     super.dispose();
     dList = [];
+  }
+  @override
+  void initState() {
+   getDriverList();
+    super.initState();
   }
   Widget build(BuildContext context)
   {

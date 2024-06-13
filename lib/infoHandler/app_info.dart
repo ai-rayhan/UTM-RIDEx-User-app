@@ -8,8 +8,10 @@ class AppInfo extends ChangeNotifier
   int countTotalTrips =0;
   List<String> historyTripsKeysList=[];
   List<TripsHistoryModel> allTripsHistoryInformationList = [];
-
-
+  int rideIndex=-1;
+  saveRideIndex(rideindex){
+    rideIndex=rideindex;
+  }
   void updatePickUpLocationAddress(Directions userPickUpAddress)
   {
     userPickUpLocation = userPickUpAddress;

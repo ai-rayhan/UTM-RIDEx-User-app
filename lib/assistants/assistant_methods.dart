@@ -127,7 +127,7 @@ class AssistantMethods
           "priority": "high",
           "to": deviceRegistrationToken,
         };
-    
+    log(datMap.toString());
     var responseNotification = http.post(
       Uri.parse("https://fcm.googleapis.com/fcm/send"),
       headers: headerNotification,

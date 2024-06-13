@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -53,7 +54,7 @@ class _MainScreenState extends State<MainScreen>
 
   GlobalKey<ScaffoldState> sKey = GlobalKey<ScaffoldState>();
 
-  double searchLocationContainerHeight = 300.0;
+  double searchLocationContainerHeight = 280.0;
   double waitingResponseFromDriverContainerHeight = 0;
   double assignedDriverInfoContainerHeight = 0;
 
@@ -63,7 +64,8 @@ class _MainScreenState extends State<MainScreen>
   LocationPermission? _locationPermission;
 
   double bottomPaddingOfMap = 0;
-
+  
+  DateTime _scheduleTime = DateTime.now();
   List<LatLng> pLineCoOrdinatesList = [];
   Set<Polyline> polyLineSet= {};
 
@@ -109,14 +111,14 @@ class _MainScreenState extends State<MainScreen>
     String humanReadableAddress = await AssistantMethods.searchAddressForGeographicCoOrdinates(userCurrentPosition!, context);
     print("this is you address = " + humanReadableAddress);
 
-    // userName = userModelCurrentInfo!.name!;
-    // userEmail = userModelCurrentInfo!.email!;
+    userName = userModelCurrentInfo!.name!;
+    userEmail = userModelCurrentInfo!.email!;
      setState(() {
        
      });
-    // initializeGeofireListener();
+    initializeGeofireListener();
 
-    // AssistantMethods.readTripKeysForOnlineUser(context);
+    AssistantMethods.readTripKeysForOnlineUser(context);
   }
 
   @override
@@ -157,6 +159,7 @@ class _MainScreenState extends State<MainScreen>
       "userPhone": userModelCurrentInfo!.phone,
       "originAddress": originLocation.locationName,
       "destinationAddress": destinationLocation.locationName,
+      "rideType": selectedIndex,
       "driverId": "waiting",
     };
 
@@ -478,11 +481,12 @@ class _MainScreenState extends State<MainScreen>
       throw 'Could not launch $url';
     }
   }
-  int selectedIndex = -1;
+
+ int selectedIndex = -1;
   void selectItem(int index) {
-    setState(() {
       selectedIndex = index;
-    });
+      context.read<AppInfo>().saveRideIndex(selectedIndex);
+      setState(() {});
   }
   @override
   Widget build(BuildContext context) {
@@ -594,7 +598,7 @@ class _MainScreenState extends State<MainScreen>
                           SizedBox(width: 10,),
                           SelectionCard(
                             bgColor:  selectedIndex == 2? Colors.orange:null,
-                            image: "images/month.png",ontap: () {
+                            image: "images/delivery.png",ontap: () {
                              selectItem(2);
                           },),
                           // SizedBox(width: 16,),
@@ -690,41 +694,80 @@ class _MainScreenState extends State<MainScreen>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          Expanded(
-                            flex: 1,
-                            child: Container(
-                              height: 50,
-                              decoration: BoxDecoration(
-                              color:Color.fromARGB(57, 255, 255, 255),
-                             border: Border.all(width: 1,color: Colors.white60),
-                              borderRadius: BorderRadius.circular(15)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: SizedBox( 
-                                  height: 35,
-                                  width: 40,
-                                  child: Image.asset("images/shedule.png") ),
+                          GestureDetector(
+                            onTap: () async{
+                              DateTime? picked = await showDatePicker(
+                    context: context,
+                    initialDate: _scheduleTime,
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime(2100),
+                  );
+                  if (picked != null) {
+                    TimeOfDay? time = await showTimePicker(
+                      context: context,
+                      initialTime: TimeOfDay.fromDateTime(_scheduleTime),
+                    );
+                    if (time != null) {
+                      setState(() {
+                        _scheduleTime = DateTime(
+                          picked.year,
+                          picked.month,
+                          picked.day,
+                          time.hour,
+                          time.minute,
+                        );
+                      });
+                    }
+                  }
+                            },
+                            child: Expanded(
+                              flex: 1,
+                              child: Container(
+                                height: 50,
+                                decoration: BoxDecoration(
+                                color:Color.fromARGB(57, 255, 255, 255),
+                               border: Border.all(width: 1,color: Colors.white60),
+                                borderRadius: BorderRadius.circular(15)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: SizedBox( 
+                                    height: 35,
+                                    width: 40,
+                                    child: Image.asset("images/shedule.png") ),
+                                ),
                               ),
                             ),
                           ),
                            SizedBox(width: 10,),
                           Expanded(
                             flex: 5,
-                            child: Container(
-                              height: 50,
-                              decoration: BoxDecoration(
-                              color:Color.fromARGB(57, 255, 255, 255),
-                             border: Border.all(width: 1,color: Colors.white60),
-                              borderRadius: BorderRadius.circular(15)),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Text(
-                                      "Ride Now 🚀",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),
-                                    ),
-                                  ],
+                            child: GestureDetector(
+                              onTap:() {
+                          if(Provider.of<AppInfo>(context, listen: false).userDropOffLocation != null)
+                            {
+                              saveRideRequestInformation();
+                            }
+                          else
+                            {
+                              Fluttertoast.showToast(msg: "Please select destination location");
+                            }
+                        },
+                              child: Container(
+                                height: 50,
+                                decoration: BoxDecoration(
+                                color:Color.fromARGB(57, 255, 255, 255),
+                               border: Border.all(width: 1,color: Colors.white60),
+                                borderRadius: BorderRadius.circular(15)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      const Text(
+                                        "Ride Now 🚀",style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -748,7 +791,7 @@ class _MainScreenState extends State<MainScreen>
             child: Container(
               height: waitingResponseFromDriverContainerHeight,
               decoration: const BoxDecoration(
-                  color: Colors.black87,
+                  color: Colors.orange,
                   borderRadius: BorderRadius.only(
                     topRight: Radius.circular(20),
                     topLeft: Radius.circular(20),
@@ -1017,9 +1060,9 @@ class _MainScreenState extends State<MainScreen>
     Geofire.initialize("activeDrivers");
 
     Geofire.queryAtLocation(
-        userCurrentPosition!.latitude, userCurrentPosition!.longitude, 10)!
+        userCurrentPosition!.latitude, userCurrentPosition!.longitude, 200)!
         .listen((map) {
-      print(map);
+      log(map.toString());
       if (map != null) {
         var callBack = map['callBack'];
 
@@ -1118,7 +1161,7 @@ final VoidCallback ontap;
       onTap:ontap,
       child: SizedBox(
         height:75,
-        width: 100,
+        width: MediaQuery.sizeOf(context).width/3.8,
         child: CustomContainer(
         bgColor: bgColor,
         child: 
