@@ -439,8 +439,8 @@ class _MainScreenState extends State<MainScreen>
           String deviceRegistrationToken = snap.snapshot.value.toString();
 
           //send notification
-          AssistantMethods.sendNotificationToDriverNow(deviceRegistrationToken,
-              referenceRideRequest!.key.toString(),
+          AssistantMethods.sendNotificationToDriverNow(chosenDriverId,
+              // referenceRideRequest!.key.toString(),
               context
           );
 

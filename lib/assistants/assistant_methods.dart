@@ -96,43 +96,66 @@ class AssistantMethods
     return double.parse(totalFareAmount.toStringAsFixed(1));
   }
 
-  static sendNotificationToDriverNow(String deviceRegistrationToken, String userRideRequestId, context) async
+  static sendNotificationToDriverNow(String riderUID, context) async
   {
-    String destinationAddress = userDropOffAddress;
+   
+  final response = await http.post(
+    Uri.parse('https://onesignal.com/api/v1/notifications'),
+    headers: {
+      'Content-Type': 'application/json; charset=UTF-8',
+      'Authorization':
+          'Basic MDhjMDQxN2MtOWVmZS00YjUyLWFmNDQtMDM0MzkzMjQ4MjA4',
+    },
+    body: json.encode({
+      'app_id':
+          '730ff581-8df1-415b-98da-0dab05dbd851',
+      'headings': {'en': "New Ride Request"},
+      'contents': {'en': "Accept or decline the ride request"},
+       'include_player_ids': [riderUID]
+    }),
+  );
 
-    Map<String, String> headerNotification =
-        {
-          'Content-Type': 'application/json',
-          'Authorization': cloudMessagingServerToken,
-        };
+  if (response.statusCode == 200) {
+    print("sent");
+  } else {
+    print(response.body);
+  }
 
-    Map bodyNotification =
-        {
-          "body":"Hello, you have a new Ride Request to, \n$destinationAddress",
-          "title":"UTM Ridex App"
-        };
+    // String destinationAddress = userDropOffAddress;
 
-    Map datMap =
-        {
-          "click_action": "FLUTTER_NOTIFICATION_CLICK",
-          "id": "1",
-          "status": "done",
-          "rideRequestId": userRideRequestId
-        };
+    // Map<String, String> headerNotification =
+    //     {
+    //       'Content-Type': 'application/json',
+    //       'Authorization': cloudMessagingServerToken,
+    //     };
 
-    Map officialNotificationFormat =
-        {
-          "notification": bodyNotification,
-          "data": datMap,
-          "priority": "high",
-          "to": deviceRegistrationToken,
-        };
-    log(datMap.toString());
-    var responseNotification = http.post(
-      Uri.parse("https://fcm.googleapis.com/fcm/send"),
-      headers: headerNotification,
-      body: jsonEncode(officialNotificationFormat),
-    );
+    // Map bodyNotification =
+    //     {
+    //       "body":"Hello, you have a new Ride Request to, \n$destinationAddress",
+    //       "title":"UTM Ridex App"
+    //     };
+
+    // Map datMap =
+    //     {
+    //       "click_action": "FLUTTER_NOTIFICATION_CLICK",
+    //       "id": "1",
+    //       "status": "done",
+    //       "rideRequestId": userRideRequestId
+    //     };
+
+    // Map officialNotificationFormat =
+    //     {
+    //       "notification": bodyNotification,
+    //       "data": datMap,
+    //       "priority": "high",
+    //       "to": deviceRegistrationToken,
+    //     };
+    // log(datMap.toString());
+    // var responseNotification = http.post(
+    //   Uri.parse("https://fcm.googleapis.com/fcm/send"),
+    //   headers: headerNotification,
+    //   body: jsonEncode(officialNotificationFormat),
+    // );
   }
   
   //retrieve the trips keys for online user
