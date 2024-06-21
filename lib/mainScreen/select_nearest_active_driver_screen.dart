@@ -8,7 +8,7 @@ import 'package:users_app/assistants/assistant_methods.dart';
 import 'package:users_app/global/global.dart';
 import 'package:users_app/infoHandler/app_info.dart';
 
-class SelectNearestActiveDriversScreen extends StatefulWidget {
+class SelectNearestActiveDriversScreen extends StatefulWidget { 
   final DatabaseReference? referenceRideRequest;
 
   SelectNearestActiveDriversScreen({this.referenceRideRequest});

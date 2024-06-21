@@ -24,7 +24,7 @@ class _PlacePredictionTileDesignState extends State<PlacePredictionTileDesign> {
   {
     showDialog(context: context,
       builder: (BuildContext context) => ProgressDialog(
-          message: "Setting Up Drop-Off, Please wait...",
+          message: "Please wait...",
         ),
     );
 

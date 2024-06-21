@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:users_app/firebase_options.dart';
 import 'package:users_app/infoHandler/app_info.dart';
+import 'package:users_app/services/firebase_messeging_service.dart';
 import 'package:users_app/splashScreen/splash_screen.dart';
 
 void main() async
@@ -11,6 +12,9 @@ void main() async
 await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
 );
+  await FirebaseMessagingService().initialize();
+  await FirebaseMessagingService().getFCMToken();
+  await FirebaseMessagingService().subscribeToTopic('all-users');
   runApp(
     MyApp(
       child: ChangeNotifierProvider(

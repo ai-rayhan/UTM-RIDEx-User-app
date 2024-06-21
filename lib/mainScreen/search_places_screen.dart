@@ -25,7 +25,7 @@ class _SearchPlacesScreenState extends State<SearchPlacesScreen>
   {
     if(inputText.length > 1) //write 2 or more char
       {
-        String urlAutoCompleteSearch = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$inputText&key=$mapkey&components=country:MY";
+        String urlAutoCompleteSearch = "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$inputText&key=$mapkey&components=country:BD";
 // MY
         var responseAutoCompleteSearch = await RequestAssistant.receiveRequest(urlAutoCompleteSearch);
         log(responseAutoCompleteSearch.toString());
