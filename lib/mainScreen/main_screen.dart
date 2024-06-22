@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +64,7 @@ class _MainScreenState extends State<MainScreen> {
 
   double bottomPaddingOfMap = 0;
 
-  DateTime _scheduleTime = DateTime.now();
+  DateTime _scheduleTime = DateTime(2023);
   List<LatLng> pLineCoOrdinatesList = [];
   Set<Polyline> polyLineSet = {};
 
@@ -160,7 +161,7 @@ class _MainScreenState extends State<MainScreen> {
       "userPhone": userModelCurrentInfo!.phone,
       "originAddress": originLocation.locationName,
       "destinationAddress": destinationLocation.locationName,
-      "rideType": selectedIndex,
+      "rideType": _rideTypeIndex,
       "driverId": "waiting",
     };
 
@@ -437,10 +438,8 @@ class _MainScreenState extends State<MainScreen> {
         String deviceRegistrationToken = snap.snapshot.value.toString();
 
         //send notification
-      AssistantMethods.sendNotificationToDriverNow(deviceRegistrationToken,
-              referenceRideRequest!.key.toString(),
-              context
-          );
+        AssistantMethods.sendNotificationToDriverNow(deviceRegistrationToken,
+            referenceRideRequest!.key.toString(), context);
 
         Fluttertoast.showToast(msg: "Notification sent Successfully");
       } else {
@@ -473,13 +472,56 @@ class _MainScreenState extends State<MainScreen> {
     }
   }
 
-  int selectedIndex = -1;
-  void selectItem(int index) {
-    selectedIndex = index;
-    context.read<AppInfo>().saveRideIndex(selectedIndex);
+  final DatabaseService database = DatabaseService();
+  void _scheduleRide() async {
+  try {
+    // Retrieve AppInfo once to avoid multiple context lookups
+    final appInfo = Provider.of<AppInfo>(context, listen: false);
+    
+    // Handle pickup location
+    // final pickupLocation = appInfo.userPickUpLocation != null 
+    //     ? (() {
+    //         String locationName = appInfo.userPickUpLocation!.locationName!;
+    //         int endIndex = locationName.length < 24 ? locationName.length : 24;
+    //         return locationName.substring(0, endIndex).toUpperCase() + 
+    //                (locationName.length > 24 ? "..." : "");
+    //       })()
+    //     : "Please Wait...";
+
+    // Handle drop off location
+    final dropOffLocation = appInfo.userDropOffLocation?.locationName ?? "Unknown Location";
+
+    // Schedule the ride
+    await database.scheduleRide({
+      "uid":currentUid,
+      "userName":userName,
+      'rideType': _rideTypeIndex==0?"Bike":_rideTypeIndex==1?"Car":"Delivery",
+      'scheduledTime': _scheduleTime.toIso8601String(),
+      'status': 'pending',
+      'pickupLocation': appInfo.userPickUpLocation!.locationName!,
+      'droppingPoint': dropOffLocation,
+      'proposals': [],
+    });
+
+    // Show success message and navigate to UpCommingTripScreen
+    Fluttertoast.showToast(msg: "Ride Scheduled Successfully");
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => UpCommingTripScreen()),
+    );
+  } catch (e) {
+    // Show error message
+    Fluttertoast.showToast(msg: "An error occurred");
+  }
+}
+
+
+  int _rideTypeIndex = -1;
+  void selectRideType(int index) {
+    _rideTypeIndex = index;
+    context.read<AppInfo>().saveRideIndex(_rideTypeIndex);
     setState(() {});
   }
-
   @override
   Widget build(BuildContext context) {
     createActiveNearbyDriverIconMarker();
@@ -571,30 +613,30 @@ class _MainScreenState extends State<MainScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SelectionCard(
-                            bgColor: selectedIndex == 0 ? Colors.orange : null,
+                            bgColor: _rideTypeIndex == 0 ? Colors.orange : null,
                             image: "images/bike.png",
                             ontap: () {
-                              selectItem(0);
+                              selectRideType(0);
                             },
                           ),
                           SizedBox(
                             width: 10,
                           ),
                           SelectionCard(
-                            bgColor: selectedIndex == 1 ? Colors.orange : null,
+                            bgColor: _rideTypeIndex == 1 ? Colors.orange : null,
                             image: "images/car1.png",
                             ontap: () {
-                              selectItem(1);
+                              selectRideType(1);
                             },
                           ),
                           SizedBox(
                             width: 10,
                           ),
                           SelectionCard(
-                            bgColor: selectedIndex == 2 ? Colors.orange : null,
+                            bgColor: _rideTypeIndex == 2 ? Colors.orange : null,
                             image: "images/delivery.png",
                             ontap: () {
-                              selectItem(2);
+                              selectRideType(2);
                             },
                           ),
                         ],
@@ -635,7 +677,7 @@ class _MainScreenState extends State<MainScreen> {
                                                   ? "..."
                                                   : "");
                                         })()
-                                      : "Failed to locate address",
+                                      : "Please Wait...",
                                   style: const TextStyle(
                                       color: Colors.black, fontSize: 14),
                                 ),
@@ -702,35 +744,32 @@ class _MainScreenState extends State<MainScreen> {
                         children: [
                           GestureDetector(
                             onTap: () async {
-                              obtainCredentials();
-                              // Navigator.push(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //         builder: (context) =>
-                              //             UserPanel()));
-                              // DateTime? picked = await showDatePicker(
-                              //   context: context,
-                              //   initialDate: _scheduleTime,
-                              //   firstDate: DateTime.now(),
-                              //   lastDate: DateTime(2100),
-                              // );
-                              // if (picked != null) {
-                              //   TimeOfDay? time = await showTimePicker(
-                              //     context: context,
-                              //     initialTime: TimeOfDay.fromDateTime(_scheduleTime),
-                              //   );
-                              //   if (time != null) {
-                              //     setState(() {
-                              //       _scheduleTime = DateTime(
-                              //         picked.year,
-                              //         picked.month,
-                              //         picked.day,
-                              //         time.hour,
-                              //         time.minute,
-                              //       );
-                              //     });
-                              //   }
-                              // }
+                              // obtainCredentials();
+
+                              DateTime? picked = await showDatePicker(
+                                context: context,
+                                initialDate: DateTime.now(),
+                                firstDate: DateTime.now(),
+                                lastDate: DateTime(2100),
+                              );
+                              if (picked != null) {
+                                TimeOfDay? time = await showTimePicker(
+                                  context: context,
+                                  initialTime:
+                                      TimeOfDay.fromDateTime(_scheduleTime),
+                                );
+                                if (time != null) {
+                                  setState(() {
+                                    _scheduleTime = DateTime(
+                                      picked.year,
+                                      picked.month,
+                                      picked.day,
+                                      time.hour,
+                                      time.minute,
+                                    );
+                                  });
+                                }
+                              }
                             },
                             child: Container(
                               height: 50,
@@ -754,15 +793,19 @@ class _MainScreenState extends State<MainScreen> {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                if (Provider.of<AppInfo>(context, listen: false)
-                                        .userDropOffLocation !=
-                                    null) {
-                                  saveRideRequestInformation();
-                                } else {
-                                  Fluttertoast.showToast(
-                                      msg:
-                                          "Please select destination location");
-                                }
+                                // if (Provider.of<AppInfo>(context, listen: false)
+                                //         .userDropOffLocation !=
+                                //     null) {
+                                //   if (_scheduleTime == DateTime(2023)) {
+                                //     saveRideRequestInformation();
+                                //   } else {
+                                    _scheduleRide();
+                                //   }
+                                // } else {
+                                //   Fluttertoast.showToast(
+                                //       msg:
+                                //           "Please select destination location");
+                                // }
                               },
                               child: Container(
                                 height: 50,
@@ -777,7 +820,7 @@ class _MainScreenState extends State<MainScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       _scheduleTime.isBefore(DateTime.now()
-                                              .add(Duration(minutes: 1)))
+                                              .add(Duration(minutes: 30)))
                                           ? const Text(
                                               "Ride Now 🚀",
                                               style: TextStyle(

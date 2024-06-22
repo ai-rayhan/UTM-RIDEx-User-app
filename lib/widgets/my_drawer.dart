@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:users_app/global/global.dart';
 import 'package:users_app/mainScreen/about_screen.dart';
+import 'package:users_app/mainScreen/monthly_hourly_basis.dart';
 import 'package:users_app/mainScreen/profile_screen.dart';
+import 'package:users_app/mainScreen/schedule_ride.dart';
 import 'package:users_app/mainScreen/trips_history_screen.dart';
 import 'package:users_app/models/trips_history_model.dart';
 import 'package:users_app/splashScreen/splash_screen.dart';
@@ -43,26 +45,32 @@ class _MyDrawerState extends State<MyDrawer> {
 
                   const SizedBox(width: 16,),
 
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        widget.name.toString(),
-                        style: const TextStyle(
-                          fontSize: 16,
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
+                  Expanded(
+                    
+                    child: Column(
+
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          widget.name.toString(),
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(height: 10,),
-                      Text(
-                        widget.email.toString(),
-                        style: const TextStyle(
-                          fontSize: 12,
-                          color: Colors.black,
+                        const SizedBox(height: 10,),
+                        Text(
+                          widget.email.toString(),
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -81,6 +89,34 @@ class _MyDrawerState extends State<MyDrawer> {
               leading: Icon(Icons.history, color: Colors.black,),
               title: Text(
                 "History",
+                style: TextStyle(
+                  color: Colors.black
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (c)=> UpCommingTripScreen()));
+            },
+            child: const ListTile(
+              leading: Icon(Icons.schedule, color: Colors.black,),
+              title: Text(
+                "Schedule Ride",
+                style: TextStyle(
+                  color: Colors.black
+                ),
+              ),
+            ),
+          ),
+          GestureDetector(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (c)=> MonthlyORHourlyBasis()));
+            },
+            child: const ListTile(
+              leading: Icon(Icons.calendar_month, color: Colors.black,),
+              title: Text(
+                "Monthly/Hourly Basis Car Rent",
                 style: TextStyle(
                   color: Colors.black
                 ),
