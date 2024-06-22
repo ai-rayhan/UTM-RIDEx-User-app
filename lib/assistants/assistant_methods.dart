@@ -115,7 +115,7 @@ static sendNotificationToDriverNow(
     
     Map<String, dynamic> bodyNotification = {
       "message": {
-        "token": "e6pCbL_pS5u9OyXvlY4g1g:APA91bHx-k94-UAkAHTmYkuVUn5i1Z2YporFC-6e2WIV-3OOh6aEtwOA0Wt0k88QTGrH5I03KEWH83__8aH3vZD2eLW7cWXohJlClPdgif7CcZGwioJsvNiGR3SnKFx34y_qwouxBojD",
+        "token": deviceRegistrationToken,
         "notification": {
           "body": "Hello, you have a new Ride Request to, \n$destinationAddress",
           "title": "UTM Ridex App",
@@ -128,13 +128,34 @@ static sendNotificationToDriverNow(
         }
       }
     };
+    Map<String, dynamic> globalNotification = {
+      "message": {
+        "topic": "allDrivers",
+        "notification": {
+          "body": "",
+          "title": "UTM Ridex App",
+        },
+        "data": {
+          "click_action": "FLUTTER_NOTIFICATION_CLICK",
+          "id": "1",
+          "status": " ",
+          "rideRequestId": ''
+        }
+      }
+    };
     
     var responseNotification = await http.post(
       Uri.parse("https://fcm.googleapis.com/v1/projects/friendly-folio-425114-v9/messages:send"),
       headers: headerNotification,
       body: jsonEncode(bodyNotification),
     );
+    var responseglobalNotification = await http.post(
+      Uri.parse("https://fcm.googleapis.com/v1/projects/friendly-folio-425114-v9/messages:send"),
+      headers: headerNotification,
+      body: jsonEncode(globalNotification),
+    );
     
+    print(responseglobalNotification);
     print(headerNotification);
     print(responseNotification.body);
   } catch (e) {
