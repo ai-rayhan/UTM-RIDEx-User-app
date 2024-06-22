@@ -793,19 +793,19 @@ class _MainScreenState extends State<MainScreen> {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                // if (Provider.of<AppInfo>(context, listen: false)
-                                //         .userDropOffLocation !=
-                                //     null) {
-                                //   if (_scheduleTime == DateTime(2023)) {
-                                //     saveRideRequestInformation();
-                                //   } else {
+                                if (Provider.of<AppInfo>(context, listen: false)
+                                        .userDropOffLocation !=
+                                    null) {
+                                  if (_scheduleTime == DateTime(2023)) {
+                                    saveRideRequestInformation();
+                                  } else {
                                     _scheduleRide();
-                                //   }
-                                // } else {
-                                //   Fluttertoast.showToast(
-                                //       msg:
-                                //           "Please select destination location");
-                                // }
+                                  }
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg:
+                                          "Please select destination location");
+                                }
                               },
                               child: Container(
                                 height: 50,
