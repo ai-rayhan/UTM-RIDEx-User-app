@@ -61,7 +61,7 @@ class _MySplashScreenState extends State<MySplashScreen> {
                 ),
                 Spacer(),
                 Text(
-                  "UTM Ridex",
+                  "UTM RIDEx",
                   textAlign: TextAlign.center,
                   style: const TextStyle(
                       color: Colors.white,
