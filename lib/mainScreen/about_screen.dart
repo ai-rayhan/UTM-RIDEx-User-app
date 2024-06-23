@@ -61,7 +61,7 @@ class _AboutScreenState extends State<AboutScreen>
               const SizedBox(height: 10,),
 
               const Text(
-                "UTM Ridex was developed in January 2023.",
+                "UTM Ridex was developed in June 2024.",
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 16,

@@ -32,11 +32,14 @@ class DatabaseService {
     await http.post(url, body: json.encode(proposalData));
   }
 
-  Future<void> confirmDriver(String rideId, String driverId) async {
+  Future<void> confirmDriver(
+      String rideId, String driverId, String driverName, String vehicleName) async {
     final url = Uri.parse('$databaseUrl/rides/$rideId.json');
     await http.patch(url,
         body: json.encode({
           'confirmedDriver': driverId,
+          'driverName': driverName,
+          'vehicleName': vehicleName,
           'status': 'confirmed',
         }));
   }
@@ -64,12 +67,12 @@ class _UpCommingTripScreenState extends State<UpCommingTripScreen> {
     });
   }
 
-  void _confirmDriver(String rideId, String driverId) async {
+  void _confirmDriver(String rideId, String driverId, String driverName, String vehicleName) async {
     setState(() {
       _isLoading = true;
     });
     try {
-      await database.confirmDriver(rideId, driverId);
+      await database.confirmDriver(rideId, driverId, driverName, vehicleName);
       _fetchRides();
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text('Driver confirmed successfully'),
@@ -88,7 +91,9 @@ class _UpCommingTripScreenState extends State<UpCommingTripScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.orangeAccent,
       appBar: AppBar(
+        backgroundColor: Colors.orangeAccent,
         title: const Text('Up Comming Trips'),
       ),
       body: Padding(
@@ -110,15 +115,17 @@ class _UpCommingTripScreenState extends State<UpCommingTripScreen> {
                   }
 
                   final data = snapshot.data!;
-                  final rides = data.where((element) => element['uid']==currentUid).toList();
+                  final rides = data.where((element) => element['uid'] == currentUid).toList();
 
                   return ListView.builder(
                     itemCount: rides.length,
                     itemBuilder: (context, index) {
                       final ride = rides[index];
                       final proposals = ride['proposals'] ?? {};
+                      final isConfirmed = ride['status'] == 'confirmed';
 
                       return Card(
+                        color: isConfirmed ? Colors.green[100] : Color.fromARGB(255, 255, 214, 160),
                         margin: const EdgeInsets.symmetric(vertical: 8.0),
                         elevation: 3,
                         shape: RoundedRectangleBorder(
@@ -164,8 +171,26 @@ class _UpCommingTripScreenState extends State<UpCommingTripScreen> {
                                   color: Colors.grey[600],
                                 ),
                               ),
+                              if (isConfirmed) ...[
+                                const SizedBox(height: 16),
+                                Text(
+                                  'Driver Name: ${ride['driverName']}',
+                                  style: TextStyle(
+                                    color: Colors.blueAccent,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Vehicle Name: ${ride['vehicleName']}',
+                                  style: TextStyle(
+                                    color: Colors.blueAccent,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                               const SizedBox(height: 16),
-                              if (proposals.isNotEmpty)
+                              if (!isConfirmed && proposals.isNotEmpty)
                                 SizedBox(
                                   height: 140,
                                   child: SingleChildScrollView(
@@ -192,6 +217,8 @@ class _UpCommingTripScreenState extends State<UpCommingTripScreen> {
                                                   : () => _confirmDriver(
                                                         ride['id'],
                                                         proposal['driverId'],
+                                                        proposal['driverName'],
+                                                        proposal['vehicleName'],
                                                       ),
                                               child: _isLoading
                                                   ? const CircularProgressIndicator()
@@ -203,7 +230,7 @@ class _UpCommingTripScreenState extends State<UpCommingTripScreen> {
                                     ),
                                   ),
                                 ),
-                              if (proposals.isEmpty)
+                              if (!isConfirmed && proposals.isEmpty)
                                 const Text(
                                   'No proposals available',
                                   style: TextStyle(
