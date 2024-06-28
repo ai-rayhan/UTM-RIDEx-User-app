@@ -1,7 +1,8 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:http/http.dart' as http;
 
-class DatabaseService {
+class ScheduleRideService {
   final String databaseUrl = 'https://friendly-folio-425114-v9-default-rtdb.firebaseio.com/';
 
   Future<void> scheduleRide(Map<String, dynamic> rideData) async {
@@ -36,3 +37,13 @@ class DatabaseService {
     }));
   }
 }
+
+final String dbURL = 'https://friendly-folio-425114-v9-default-rtdb.firebaseio.com/';
+  getRiderdetails(riderId) async {
+    final url = Uri.parse('$dbURL/drivers/$riderId.json');
+    final response = await http.get(url);
+    final extractedData = json.decode(response.body) as Map<String, dynamic>;
+    log(extractedData.toString());
+    log("Phoofadphomdfhom ${extractedData['photoUrl']}");
+    return extractedData['photoUrl'];
+  }

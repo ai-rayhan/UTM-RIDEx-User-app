@@ -18,6 +18,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:users_app/assistants/assistant_methods.dart';
 import 'package:users_app/assistants/geofire_assistant.dart';
 import 'package:users_app/assistants/push_notification.dart';
+import 'package:users_app/assistants/schedule_service.dart';
 import 'package:users_app/authentication/login_screen.dart';
 import 'package:users_app/date_converter.dart';
 import 'package:users_app/global/global.dart';
@@ -93,6 +94,7 @@ class _MainScreenState extends State<MainScreen> {
     if (_locationPermission == LocationPermission.denied) {
       _locationPermission = await Geolocator.requestPermission();
     }
+  
   }
 
   locateUserPosition() async {
@@ -237,6 +239,7 @@ class _MainScreenState extends State<MainScreen> {
               barrierDismissible: false,
               builder: (BuildContext c) => PayFareAmountDialog(
                 fareAmount: fareAmount,
+                driverId: (eventSnap.snapshot.value as Map)["driverId"],
               ),
             );
 
@@ -427,26 +430,27 @@ class _MainScreenState extends State<MainScreen> {
         .set(referenceRideRequest!.key);
 
     //automate push notification
-    FirebaseDatabase.instance
-        .ref()
-        .child("drivers")
-        .child(chosenDriverId)
-        .child("token")
-        .once()
-        .then((snap) {
-      if (snap.snapshot.value != null) {
-        String deviceRegistrationToken = snap.snapshot.value.toString();
+    // FirebaseDatabase.instance
+    //     .ref()
+    //     .child("drivers")
+    //     .child(chosenDriverId)
+    //     .child("token")
+    //     .once()
+    //     .then((snap) {
+    //   if (snap.snapshot.value != null) {
+    //     String deviceRegistrationToken = snap.snapshot.value.toString();
+         String deviceRegistrationToken = '';
 
         //send notification
         AssistantMethods.sendNotificationToDriverNow(deviceRegistrationToken,
             referenceRideRequest!.key.toString(), context);
 
         Fluttertoast.showToast(msg: "Notification sent Successfully");
-      } else {
-        Fluttertoast.showToast(msg: "Please choose another drivers.");
-        return;
-      }
-    });
+      // } else {
+      //   Fluttertoast.showToast(msg: "Please choose another drivers.");
+      //   return;
+      // }
+    // });
   }
 
   retrieveOnlineDriversInformation(List onlineNearestdriversList) async {

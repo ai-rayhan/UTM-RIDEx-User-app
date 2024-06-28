@@ -52,7 +52,7 @@ class _SelectNearestActiveDriversScreenState extends State<SelectNearestActiveDr
   getFareAmountAccordingToVehicleType(int index) {
     if (tripDirectionDetailsInfo != null) {
       fareAmount = (AssistantMethods.calculateFareAmountFromOriginToDestination(tripDirectionDetailsInfo!) * 4)
-          .toStringAsFixed(1);
+          .toStringAsFixed(3);
     }
     return fareAmount;
   }

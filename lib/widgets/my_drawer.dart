@@ -111,12 +111,12 @@ class _MyDrawerState extends State<MyDrawer> {
           ),
           GestureDetector(
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (c)=> UserScreen()));
+              Navigator.push(context, MaterialPageRoute(builder: (c)=> MonthlyORHourlyBasis()));
             },
             child: const ListTile(
               leading: Icon(Icons.calendar_month, color: Colors.black,),
               title: Text(
-                "Monthly/Hourly Basis Car Rent",
+                "Car Rental",
                 style: TextStyle(
                   color: Colors.black
                 ),

@@ -4,7 +4,7 @@ import 'package:users_app/assistants/schedule_service.dart';
 class DriverPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final database = DatabaseService();
+    final database = ScheduleRideService();
 
     return Scaffold(
       appBar: AppBar(

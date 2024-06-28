@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:users_app/assistants/schedule_service.dart';
 
 class PayFareAmountDialog extends StatefulWidget
 {
   double? fareAmount;
+  String? driverId;
 
-  PayFareAmountDialog({this.fareAmount});
+  PayFareAmountDialog({ this.fareAmount,this.driverId});
 
   @override
   State<PayFareAmountDialog> createState() => _PayFareAmountDialogState();
@@ -16,6 +18,18 @@ class PayFareAmountDialog extends StatefulWidget
 
 class _PayFareAmountDialogState extends State<PayFareAmountDialog>
 {
+  String qrCodeUrl='';
+  @override
+  void initState() {
+   loadRiderData();
+    super.initState();
+  }
+   loadRiderData()async{
+   qrCodeUrl= await getRiderdetails(widget.driverId);
+   setState(() {
+     
+   });
+  }
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -75,6 +89,7 @@ class _PayFareAmountDialogState extends State<PayFareAmountDialog>
                 ),
               ),
             ),
+            qrCodeUrl!=''?Image.network(qrCodeUrl,height: 120,width: 150,fit: BoxFit.cover,):Container(),
 
             const SizedBox(height: 10,),
 
