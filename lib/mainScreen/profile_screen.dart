@@ -23,10 +23,10 @@ class _ProfileScreenState extends State<ProfileScreen>
 
             //username
             Text(
-              userModelCurrentInfo!.name!,
+              userModelCurrentInfo?.name??'',
               style: const TextStyle(
                 fontSize: 30.0,
-                color: Colors.purple,
+                color: Color(0Xff5D001D),
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -35,7 +35,7 @@ class _ProfileScreenState extends State<ProfileScreen>
               height: 20,
               width: 200,
               child: Divider(
-                color: Colors.purple,
+                color: Color(0Xff5D001D),
                 height: 2,
                 thickness: 2,
             ),
@@ -45,13 +45,13 @@ class _ProfileScreenState extends State<ProfileScreen>
 
             //phone
             InfoDesignUIWidget(
-              textInfo: userModelCurrentInfo!.phone!,
+              textInfo: userModelCurrentInfo?.phone??"",
               iconData: Icons.phone_iphone,
             ),
 
             //email
             InfoDesignUIWidget(
-              textInfo: userModelCurrentInfo!.email!,
+              textInfo: userModelCurrentInfo?.email??"",
               iconData: Icons.email,
             ),
 
@@ -63,7 +63,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                   Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.purple
+                  backgroundColor: Color(0Xff5D001D)
                 ),
                 child: const Text(
                   "Close",

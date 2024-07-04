@@ -34,7 +34,7 @@ class _MyDrawerState extends State<MyDrawer> {
             height: 200,
             color: Colors.black,
             child: DrawerHeader(
-              decoration: const BoxDecoration(color: Colors.purple),
+              decoration: const BoxDecoration(color: Color.fromARGB(255, 121, 30, 58)),
               child: Row(
                 children: [
                   const Icon(

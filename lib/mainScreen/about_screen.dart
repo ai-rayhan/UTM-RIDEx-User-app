@@ -78,7 +78,7 @@ class _AboutScreenState extends State<AboutScreen>
                   SystemNavigator.pop();
                 },
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purple
+                    backgroundColor: Color(0Xff5D001D)
                 ),
                 child: const Text(
                   "Close",

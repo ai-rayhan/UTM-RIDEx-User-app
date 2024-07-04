@@ -62,7 +62,7 @@ class _SelectNearestActiveDriversScreenState extends State<SelectNearestActiveDr
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Colors.purple,
+        backgroundColor: Color(0Xff5D001D),
         title: const Text(
           "Nearest Online Drivers",
           style: TextStyle(
