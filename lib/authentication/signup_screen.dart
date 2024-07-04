@@ -21,6 +21,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
   TextEditingController confirmPasswordEditingController =
       TextEditingController();
 
+  bool passVisible = true;
+  bool confirmPassVisible = true;
+
+  bool isPasswordStrong(String password) {
+    final hasUppercase = password.contains(RegExp(r'[A-Z]'));
+    final hasLowercase = password.contains(RegExp(r'[a-z]'));
+    final hasDigits = password.contains(RegExp(r'[0-9]'));
+    final hasSpecialCharacters = password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'));
+    final hasMinLength = password.length >= 8;
+
+    return hasUppercase &&
+           hasLowercase &&
+           hasDigits &&
+           hasSpecialCharacters &&
+           hasMinLength;
+  }
+
   validateForm() {
     if (nametextEditingController.text.length < 4) {
       Fluttertoast.showToast(msg: "Name must be at least 4 characters.");
@@ -28,8 +45,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       Fluttertoast.showToast(msg: "Email is not valid.");
     } else if (phoneextEditingController.text.isEmpty) {
       Fluttertoast.showToast(msg: "Phone number is required.");
-    } else if (passwordtextEditingController.text.length < 6) {
-      Fluttertoast.showToast(msg: "Password must be at least 6 characters.");
+    } else if (!isPasswordStrong(passwordtextEditingController.text)) {
+      Fluttertoast.showToast(msg: "Password must be at least 8 characters long and include an uppercase letter, a lowercase letter, a number, and a special character.");
     } else if (passwordtextEditingController.text !=
         confirmPasswordEditingController.text) {
       Fluttertoast.showToast(
@@ -80,9 +97,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       Fluttertoast.showToast(msg: "Account has not been created.");
     }
   }
-
-  bool passVisible = true;
-  bool confirmPassVisible = true;
 
   @override
   Widget build(BuildContext context) {
